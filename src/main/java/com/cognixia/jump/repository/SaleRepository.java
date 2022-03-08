@@ -7,8 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.cognixia.jump.model.Sale;
+import com.cognixia.jump.model.User;
 
 @Repository
 public interface SaleRepository extends JpaRepository<Sale, Long> {
+	
+	public List<Sale> findSaleByUser(User user);
 	
 }

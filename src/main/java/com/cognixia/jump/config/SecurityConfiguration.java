@@ -21,8 +21,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.password("{noop}pw123") // {noop} -> not part of password, stops encoding
 			.roles("USER")
 			.and()
-			.withUser("admin1")
-			.password("{noop}pw123")
+			.withUser("admin")
+			.password("{noop}password")
 			.roles("ADMIN");
 		
 	}
@@ -34,7 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		
 		http.csrf().disable()
 			.authorizeRequests()
-			.antMatchers("/api/hello").hasAnyRole("USER", "ADMIN")
+			.antMatchers("/api/books").hasAnyRole("USER", "ADMIN")
 			.antMatchers("/**").hasRole("ADMIN")
 			.and().httpBasic();
 		

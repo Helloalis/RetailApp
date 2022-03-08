@@ -1,5 +1,6 @@
 package com.cognixia.jump.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,6 +25,8 @@ public class BookSale {
     @JoinColumn(name = "saleID")
     private Sale sale;
     
+    //how many copies of a book are being bought
+    @Column
     private int quantity;
 
 	public BookSale(Book book, Sale sale, int quantity) {

@@ -1,5 +1,7 @@
 package com.cognixia.jump.model;
 
+import java.util.Set;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +12,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.JoinColumn;
 
 @Entity
 @Table(name = "users")
@@ -22,7 +26,7 @@ public class User {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	private Integer userID;
 	
 	@Column(unique = true, nullable = false)
 	private String username;
@@ -36,22 +40,25 @@ public class User {
 	
 	@Column(columnDefinition = "boolean default true")
 	private boolean enabled;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private Set<Sale> sales;
 
 
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name = "userSales",
-        joinColumns = {@JoinColumn(name = "user_ID")},
-        inverseJoinColumns = {@JoinColumn(name = "sale  _id")}
-    )
-	private Integer saleID;
+//    @ManyToMany(cascade = {CascadeType.ALL})
+//    @JoinTable(name = "userSales",
+//        joinColumns = {@JoinColumn(name = "user_ID")},
+//        inverseJoinColumns = {@JoinColumn(name = "sale  _id")}
+//    )
+//	private Set<Sale> sales;
 	
 	public User() {
-		this(null, "N/A", "N/A", Role.ROLE_USER, true);
+		this("N/A", "N/A", Role.ROLE_USER, true);
 	}
 	
-	public User(Integer id, String username, String password, Role role, boolean enabled) {
+	public User(String username, String password, Role role, boolean enabled) {
 		super();
-		this.id = id;
+		this.userID = null;
 		this.username = username;
 		this.password = password;
 		this.role = role;
@@ -59,11 +66,11 @@ public class User {
 	}
 
 	public Integer getId() {
-		return id;
+		return userID;
 	}
 
 	public void setId(Integer id) {
-		this.id = id;
+		this.userID = id;
 	}
 
 	public String getUsername() {
@@ -98,14 +105,15 @@ public class User {
 		this.enabled = enabled;
 	}
 
-	public Integer getSaleID() {
-		return saleID;
+	public Set<Sale> getSales() {
+		return sales;
 	}
 
-	public void setSaleID(Integer saleID) {
-		this.saleID = saleID;
+	public void setSales(Set<Sale> sales) {
+		this.sales = sales;
 	}
-	
+
+
 	
 	
 }
