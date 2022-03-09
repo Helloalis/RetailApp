@@ -44,7 +44,7 @@ public class User {
 	private boolean enabled;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private List<Sale> sales;
+	private List<BookSale> bookSale;
 
 
 //    @ManyToMany(cascade = {CascadeType.ALL})
@@ -65,15 +65,7 @@ public class User {
 		this.password = password;
 		this.role = role;
 		this.enabled = enabled;
-		this.sales = new ArrayList<Sale>();
-	}
-
-	public Integer getId() {
-		return userID;
-	}
-
-	public void setId(Integer id) {
-		this.userID = id;
+		this.bookSale = new ArrayList<BookSale>();
 	}
 
 	public String getUsername() {
@@ -108,13 +100,23 @@ public class User {
 		this.enabled = enabled;
 	}
 
-	public List<Sale> getSales() {
-		return sales;
+	public Integer getUserID() {
+		return userID;
 	}
 
-	public void setSales(List<Sale> sales) {
-		this.sales = sales;
+	public void setUserID(Integer userID) {
+		this.userID = userID;
 	}
+
+	public List<BookSale> getBookSale() {
+		return bookSale;
+	}
+
+	public void setBookSale(List<BookSale> bookSale) {
+		this.bookSale = bookSale;
+	}
+
+
 
 
 	

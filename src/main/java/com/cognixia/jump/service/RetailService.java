@@ -10,22 +10,21 @@ import org.springframework.stereotype.Service;
 
 import com.cognixia.jump.model.Book;
 import com.cognixia.jump.model.BookSale;
-import com.cognixia.jump.model.Sale;
 import com.cognixia.jump.model.User;
 import com.cognixia.jump.model.User.Role;
 import com.cognixia.jump.repository.BookRepository;
 import com.cognixia.jump.repository.BookSaleRepository;
-import com.cognixia.jump.repository.SaleRepository;
 import com.cognixia.jump.repository.UserRepository;
 
+@Service
 public class RetailService {
 	
 	@Autowired
 	BookRepository bookRepo;
 	
-	@Autowired
-	SaleRepository saleRepo;
-	
+//	@Autowired
+//	SaleRepository saleRepo;
+//	
 	@Autowired
 	UserRepository userRepo;
 	
@@ -55,29 +54,29 @@ public class RetailService {
 	public BookSale createBookSale(BookSale bs) {
 		BookSale ret = new BookSale();
 		ret.setBook(bs.getBook());
-		ret.setSale(bs.getSale());
+		ret.setUser(bs.getUser());
 		ret.setQuantity(bs.getQuantity());
 		BookSale created = bookSaleRepo.save(ret);
 		return created;
 	}
 	
-	public Sale createSale(Sale sal) {
-		Sale ret = new Sale();
-		ret.setUser(sal.getUser());
-		ret.setBookSale(sal.getBookSale());
-		ret.setTotalPrice();
-		Sale salRet = saleRepo.save(ret);
-		return salRet;
-	}
+//	public Sale createSale(Sale sal) {
+//		Sale ret = new Sale();
+//		ret.setUser(sal.getUser());
+//		ret.setBookSale(sal.getBookSale());
+//		ret.setTotalPrice();
+//		Sale salRet = saleRepo.save(ret);
+//		return salRet;
+//	}
 	
 	//Read all
 	public List<Book> getAllBooks() {
 		return bookRepo.findAll();
 	}
 	
-	public List<Sale> getAllSales() {
-		return saleRepo.findAll();
-	}
+//	public List<Sale> getAllSales() {
+//		return saleRepo.findAll();
+//	}
 	
 	public List<User> getAllUsers() {
 		return userRepo.findAll();
@@ -96,10 +95,10 @@ public class RetailService {
 		Optional<User> cha = userRepo.findById(id);
 		return cha;
 	}
-	public Optional<Sale> getSaleById(int id) {
-		Optional<Sale> cha = saleRepo.findById(id);
-		return cha;
-	}
+//	public Optional<Sale> getSaleById(int id) {
+//		Optional<Sale> cha = saleRepo.findById(id);
+//		return cha;
+//	}
 	
 	//Additional Read methods
 		public Optional<Book> getBookByTitle(String title) {
@@ -110,19 +109,19 @@ public class RetailService {
 			Optional<User> retVal = userRepo.findByUsername(username);
 			return retVal;
 		}
-		public Optional<BookSale> getBookSaleByBookAndSale(Book book, Sale sale) {
-			Optional<BookSale> retVal = bookSaleRepo.findByBookAndSale(book, sale);
+		public Optional<BookSale> getBookSaleByBookAndSale(Book book, User user) {
+			Optional<BookSale> retVal = bookSaleRepo.findByBookAndUser(book, user);
 			return retVal;
 		}
 		public List<Book> getBookByAuthor(String auth) {
 			List<Book> retVal = bookRepo.findByAuthor(auth);
 			return retVal;
 		}
-		public List<Sale> getSaleByUser(User user) {
-			List<Sale> retVal = saleRepo.findSaleByUser(user);
-			return retVal;
-		}
-	
+//		public List<Sale> getSaleByUser(User user) {
+//			List<Sale> retVal = saleRepo.findSaleByUser(user);
+//			return retVal;
+//		}
+//	
 	//End of Read methods
 	//Update Methods
 	public Book updateBookById(Book book) {
@@ -133,15 +132,15 @@ public class RetailService {
 		}
 		return null;
 	}
-	public Sale updateSaleById(Sale sale) {
-		if(saleRepo.existsById(sale.getSaleId())) {
-			Sale update = saleRepo.save(sale);
-			return update;
-		}
-		return null;
-	}
+//	public Sale updateSaleById(Sale sale) {
+//		if(saleRepo.existsById(sale.getSaleId())) {
+//			Sale update = saleRepo.save(sale);
+//			return update;
+//		}
+//		return null;
+//	}
 	public User updateUserById(User user) {
-		if(userRepo.existsById(user.getId())) {
+		if(userRepo.existsByUsername(user.getUsername())) {
 			User update = userRepo.save(user);
 			return update;
 		}
@@ -166,13 +165,13 @@ public class RetailService {
 		}
 		return false;
 	}
-	public boolean deleteSaleById(int id) {
-		if(saleRepo.existsById(id)) {
-			saleRepo.deleteById(id);
-			return true;
-		}
-		return false;
-	}
+//	public boolean deleteSaleById(int id) {
+//		if(saleRepo.existsById(id)) {
+//			saleRepo.deleteById(id);
+//			return true;
+//		}
+//		return false;
+//	}
 	public boolean deleteUserById(int id) {
 
 		if(userRepo.existsById(id)) {
@@ -234,8 +233,8 @@ public class RetailService {
 		List<BookSale> retVal = bookSaleRepo.findByBook(book);
 		return retVal;
 	}
-	public List<BookSale> findBySale(Sale sale) {
-		List<BookSale> retVal = bookSaleRepo.findBySale(sale);
+	public List<BookSale> findByUser(User user) {
+		List<BookSale> retVal = bookSaleRepo.findByUser(user);
 		return retVal;
 	}
 

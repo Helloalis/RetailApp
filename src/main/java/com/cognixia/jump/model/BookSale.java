@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="booksSales")
+@Table(name="bookSales")
 public class BookSale {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +21,13 @@ public class BookSale {
     @JoinColumn(name = "bookID")
     private Book book;
 
+//    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+//    @JoinColumn(name = "saleID")
+//    private Sale sale;
+    
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "saleID")
-    private Sale sale;
+    @JoinColumn(name = "userID")
+    private User user;
     
     //how many copies of a book are being bought
     @Column
@@ -33,10 +37,10 @@ public class BookSale {
 		this(null, null, 0);
 	}
 
-	public BookSale(Book book, Sale sale, int quantity) {
+	public BookSale(Book book, User user, int quantity) {
 		super();
 		this.book = book;
-		this.sale = sale;
+		this.user = user;
 		this.quantity = quantity;
 	}
 
@@ -56,12 +60,12 @@ public class BookSale {
 		this.book = book;
 	}
 
-	public Sale getSale() {
-		return sale;
+	public User getUser() {
+		return user;
 	}
 
-	public void setSale(Sale sale) {
-		this.sale = sale;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public int getQuantity() {
