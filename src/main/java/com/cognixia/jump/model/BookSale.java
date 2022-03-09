@@ -15,7 +15,7 @@ import javax.persistence.Table;
 public class BookSale {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "bookID")

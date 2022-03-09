@@ -79,7 +79,7 @@ public class RetailService {
 //	}
 	
 	public List<User> getAllUsers() {
-		return userRepo.findAll();
+		return userRepo.findAll();  
 	}
 	
 	public List<BookSale> getAllBookSales() {
@@ -95,15 +95,22 @@ public class RetailService {
 		Optional<User> cha = userRepo.findById(id);
 		return cha;
 	}
+	public List<BookSale> findSalesByUser(User user) {
+		return bookSaleRepo.findByUser(user);
+	}
+	public List<BookSale> findSalesByBook(Book book) {
+		return bookSaleRepo.findByBook(book);
+	}
+
 //	public Optional<Sale> getSaleById(int id) {
 //		Optional<Sale> cha = saleRepo.findById(id);
 //		return cha;
-//	}
+   //	}
 	
 	//Additional Read methods
 		public Optional<Book> getBookByTitle(String title) {
 			Optional<Book> retVal = bookRepo.findByTitle(title);
-			return retVal;
+			return retVal; 
 		}
 		public Optional<User> getByUsername(String username) {
 			Optional<User> retVal = userRepo.findByUsername(username);
@@ -117,6 +124,10 @@ public class RetailService {
 			List<Book> retVal = bookRepo.findByAuthor(auth);
 			return retVal;
 		}
+//		public List<BookSale> getBookSalesByUser(String auth) {
+//			List<BookSale> retVal = bookSaleRepo.findByUser(userRepo.findByUsername(auth).get());
+//			return retVal;
+//		}
 //		public List<Sale> getSaleByUser(User user) {
 //			List<Sale> retVal = saleRepo.findSaleByUser(user);
 //			return retVal;

@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,8 +43,8 @@ public class User {
 	
 	@Column(columnDefinition = "boolean default true")
 	private boolean enabled;
-	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<BookSale> bookSale;
 
 
@@ -65,6 +66,15 @@ public class User {
 		this.password = password;
 		this.role = role;
 		this.enabled = enabled;
+		this.bookSale = new ArrayList<BookSale>();
+	}
+	public User(String username, String password) {
+		super();
+		this.userID = null;
+		this.username = username;
+		this.password = password;
+		this.role = Role.ROLE_USER;
+		this.enabled = true;
 		this.bookSale = new ArrayList<BookSale>();
 	}
 
@@ -108,14 +118,12 @@ public class User {
 		this.userID = userID;
 	}
 
-	public List<BookSale> getBookSale() {
-		return bookSale;
+	@Override
+	public String toString() {
+		return "User [userID=" + userID + ", username=" + username + ", password=" + password + ", role=" + role
+				+ ", enabled=" + enabled + "]";
 	}
-
-	public void setBookSale(List<BookSale> bookSale) {
-		this.bookSale = bookSale;
-	}
-
+	
 
 
 

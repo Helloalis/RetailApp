@@ -1,12 +1,13 @@
 package com.cognixia.jump.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
+//import org.springframework.security.authentication.AuthenticationManager;
+//import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,24 +18,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cognixia.jump.exception.NoSuchUserException;
+//import com.cognixia.jump.exception.NoSuchUserException;
 import com.cognixia.jump.model.Book;
 import com.cognixia.jump.model.BookSale;
 import com.cognixia.jump.model.User;
 import com.cognixia.jump.service.RetailService;
-import com.cognixia.jump.util.JwtUtil;
+//import com.cognixia.jump.util.JwtUtil;
 
 @RequestMapping("/api")
 @RestController
 public class RetailController {
 	
-	@Autowired
-	AuthenticationManager authenticationManager;
-	
-	@Autowired
-	UserDetailsService userDetailsService;
-	
-	@Autowired
-	JwtUtil jwtUtil;
+//	@Autowired
+//	AuthenticationManager authenticationManager;
+//	
+//	@Autowired
+//	UserDetailsService userDetailsService;
+//	
+//	@Autowired
+//	JwtUtil jwtUtil;
 	
 	@Autowired
 	RetailService serv;
@@ -67,7 +69,32 @@ public class RetailController {
 	public List<Book> getBooksShorter(@PathVariable int length) {
 		return serv.getBySizeLessThan(length);
 	}
-	
+	@GetMapping("/users") 
+	public List<User> getAllUsers() {
+		return serv.getAllUsers();
+	}
+	@GetMapping("/users/{user}") 
+	public Optional<User> getUserByUsername(@PathVariable String user) throws NoSuchUserException {
+		return serv.getByUsername(user);
+	}
+	@GetMapping("/sales/user/{username}")
+	public List<BookSale> getSalesByUser(@PathVariable String username) throws NoSuchUserException {
+		Optional<User> found = serv.getByUsername(username);
+		if(found.isEmpty()) {	
+			throw new NoSuchUserException("User " + username + " was not found");
+		}
+		User user = found.get();
+		return serv.findSalesByUser(user);
+	}
+	@GetMapping("/sales/book/{title}")
+	public List<BookSale> getSalesByBook(@PathVariable String title) {
+		Optional<Book> found = serv.getBookByTitle(title);
+		if(found.isEmpty()) {	
+			return new ArrayList<BookSale>();
+		}
+		Book book = found.get();
+		return serv.findSalesByBook(book);
+	}
 	
 //	//Sales
 //	@GetMapping("/sales")

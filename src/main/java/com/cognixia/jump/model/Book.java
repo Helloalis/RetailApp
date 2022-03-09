@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,7 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
+//import javax.validation.constraints.Min;
 
 @Entity
 @Table(name="books")
@@ -38,7 +39,7 @@ public class Book {
 //	private String publisher;
 	
 	@Column(nullable = false)
-	@Min(value = 0)	
+	//@Min(value = 0)	
 	private double price;
 	
 	//how many copies of each book are in storage
@@ -48,12 +49,12 @@ public class Book {
 	
 	//Stores page count. So much easier than for progress tracker, (incoming tangent) tracking progress for how far in a book a reader is, ... is complicated. The obvious one is page count, but page counts vary by edition. With an ebook, you can change how many pages there are by adjusting the font size. Can't rely on chapters for a percentage progress, because there's no consistent chapter size. In one of my books, I can find a 50 page chapter, and a 2 paragraph chapter. Publishes, as far as I know, judge length by word count, but readers won't know what word they're on. Therefore, tracking book progress in any mathematical reliable manner requires keeping track of every edition, and how many page count each one has. And for ebooks, its impossible unless the ereader is built into the progress tracker, since the app won't know what font size is being used, and so how many pages there are
 	@Column
-	@Min(value = 0)	
+//	@Min(value = 0)	
 	private int size;
 	
 	//I needed a many to many relationship with bookSales, but the join table need a quantity column, or else it would only keep track of what books were being sold, but not how many were being sold. Someone buys 23 copies of moby dick for English class, and the system won't track that. So instead, I set up the many to many tables manually, with two one to many relationships
 	//List of bookSales that contain each book
-	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<BookSale> bookSale;
 
 	//keeps track of what genre books fall into. Would enable users to find all books that fit in one genre, or to see books that match multiple genres. Extension, unimplemented
@@ -69,6 +70,7 @@ public class Book {
 
 	public Book(String title, String author, double price, int size, int qty) {
 		super();
+		this.bookId = null;
 		this.title = title;
 		this.author = author;
 		this.price = price;
