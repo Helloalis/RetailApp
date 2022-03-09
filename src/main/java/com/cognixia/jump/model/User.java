@@ -45,7 +45,7 @@ public class User {
 	private boolean enabled;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<BookSale> bookSale;
+	private List<Sale> bookSale;
 
 
 //    @ManyToMany(cascade = {CascadeType.ALL})
@@ -66,7 +66,7 @@ public class User {
 		this.password = password;
 		this.role = role;
 		this.enabled = enabled;
-		this.bookSale = new ArrayList<BookSale>();
+		this.bookSale = new ArrayList<Sale>();
 	}
 	public User(String username, String password) {
 		super();
@@ -75,7 +75,7 @@ public class User {
 		this.password = password;
 		this.role = Role.ROLE_USER;
 		this.enabled = true;
-		this.bookSale = new ArrayList<BookSale>();
+		this.bookSale = new ArrayList<Sale>();
 	}
 
 	public String getUsername() {

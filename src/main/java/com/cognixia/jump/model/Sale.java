@@ -11,8 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="bookSales")
-public class BookSale {
+@Table(name="sales")
+public class Sale {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -33,11 +33,11 @@ public class BookSale {
     @Column
     private int quantity;
 	
-	public BookSale() {
+	public Sale() {
 		this(null, null, 0);
 	}
 
-	public BookSale(Book book, User user, int quantity) {
+	public Sale(Book book, User user, int quantity) {
 		super();
 		this.book = book;
 		this.user = user;
