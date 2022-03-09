@@ -1,5 +1,7 @@
 package com.cognixia.jump.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -42,7 +44,7 @@ public class User {
 	private boolean enabled;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	private Set<Sale> sales;
+	private List<Sale> sales;
 
 
 //    @ManyToMany(cascade = {CascadeType.ALL})
@@ -63,6 +65,7 @@ public class User {
 		this.password = password;
 		this.role = role;
 		this.enabled = enabled;
+		this.sales = new ArrayList<Sale>();
 	}
 
 	public Integer getId() {
@@ -105,11 +108,11 @@ public class User {
 		this.enabled = enabled;
 	}
 
-	public Set<Sale> getSales() {
+	public List<Sale> getSales() {
 		return sales;
 	}
 
-	public void setSales(Set<Sale> sales) {
+	public void setSales(List<Sale> sales) {
 		this.sales = sales;
 	}
 

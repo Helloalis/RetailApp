@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.cognixia.jump.model.Book;
@@ -31,8 +32,45 @@ public class RetailService {
 	@Autowired
 	BookSaleRepository bookSaleRepo;
 
-	//Crud methods
+	//Crud methods --------------------------------------------
+	//Create 
+	public Book createBook(Book chars) {
+		Book ret = new Book();
+		ret.setTitle(chars.getTitle());
+		ret.setAuthor(chars.getAuthor());
+		ret.setPrice(chars.getPrice());
+		ret.setSize(chars.getSize());
+		ret.setQty(chars.getQty());
+		Book created = bookRepo.save(ret);
+		return created;
+	}
+//	public User createUser(User chars) {
+//		Book ret = new User();
+//		ret.setAffil(chars.getAffil());
+//		ret.setName(chars.getName());
+//		ret.setStatus(chars.getStatus());
+//		Book created = repo.save(ret);
+//		
+//		return created;
+//	}
+
+	public BookSale createBookSale(BookSale bs) {
+		BookSale ret = new BookSale();
+		ret.setBook(bs.getBook());
+		ret.setSale(bs.getSale());
+		ret.setQuantity(bs.getQuantity());
+		BookSale created = bookSaleRepo.save(ret);
+		return created;
+	}
 	
+	public Sale createSale(Sale sal) {
+		Sale ret = new Sale();
+		ret.setUser(sal.getUser());
+		ret.setBookSale(sal.getBookSale());
+		ret.setTotalPrice();
+		Sale salRet = saleRepo.save(ret);
+		return salRet;
+	}
 	
 	//Read all
 	public List<Book> getAllBooks() {
@@ -53,22 +91,19 @@ public class RetailService {
 	
 	//Read each by ID
 	public Optional<Book> getBookById(int id) {
-		Long i = (long) id;
-		Optional<Book> cha = bookRepo.findById(i);
+		Optional<Book> cha = bookRepo.findById(id);
 		return cha;
 	}
 	public Optional<User> getUserById(int id) {
-		Long i = (long) id;
 		Optional<User> cha = userRepo.findById(id);
 		return cha;
 	}
 	public Optional<Sale> getSaleById(int id) {
-		Long i = (long) id;
-		Optional<Sale> cha = saleRepo.findById(i);
+		Optional<Sale> cha = saleRepo.findById(id);
 		return cha;
 	}
 	
-	//Additional Get methods
+	//Additional Read methods
 		public Optional<Book> getBookByTitle(String title) {
 			Optional<Book> retVal = bookRepo.findByTitle(title);
 			return retVal;
@@ -81,7 +116,75 @@ public class RetailService {
 			Optional<BookSale> retVal = bookSaleRepo.findByBookAndSale(book, sale);
 			return retVal;
 		}
+		public List<Book> getBookByAuthor(String auth) {
+			List<Book> retVal = bookRepo.findByAuthor(auth);
+			return retVal;
+		}
+		public List<Sale> getSaleByUser(User user) {
+			List<Sale> retVal = saleRepo.findSaleByUser(user);
+			return retVal;
+		}
 	
+	//End of Read methods
+	//Update Methods
+	public Book updateBookById(Book book) {
+		//save() -> 
+		if(bookRepo.existsByTitle(book.getTitle())) {
+			Book update = bookRepo.save(book);
+			return update;
+		}
+		return null;
+	}
+	public Sale updateSaleById(Sale sale) {
+		if(saleRepo.existsById(sale.getSaleId())) {
+			Sale update = saleRepo.save(sale);
+			return update;
+		}
+		return null;
+	}
+	
+	
+	
+	//Delete Methods
+	public boolean deleteBookById(int id) {
+
+		if(bookRepo.existsById(id)) {
+			bookRepo.deleteById(id);
+			return true;
+		}
+		return false;
+	}
+	public boolean deleteSaleById(int id) {
+		if(saleRepo.existsById(id)) {
+			saleRepo.deleteById(id);
+			return true;
+		}
+		return false;
+	}
+	public boolean deleteUserById(int id) {
+
+		if(userRepo.existsById(id)) {
+			userRepo.deleteById(id);
+			return true;
+		}
+		return false;
+	}
+	public boolean deleteBookSaleById(int id) {
+		if(bookSaleRepo.existsById(id)) {
+			bookSaleRepo.deleteById(id);
+			return true;
+		}
+		return false;
+	}
+	public boolean deleteBookByUsername(String un) {
+		if (bookRepo.existsByTitle(un)) {
+			bookRepo.deleteBookByTitle(un);
+			return true;
+		}
+		return false;
+	}
+	
+	//End CRUD --------
 	
 	
 	//Book Methods
@@ -98,10 +201,10 @@ public class RetailService {
 		List<Book> retVal = bookRepo.findBySizeLessThan(size);
 		return retVal;
 	}
-	public Optional<Book> getByTitleContaining(String contain) {
-		Optional<Book> retVal = bookRepo.findByTitle(contain);
-		return retVal;
-	}
+//	public List<Book> getByTitleContaining(String contain) {
+//		List<Book> retVal = bookRepo.findByTitleContaining(contain);
+//		return retVal;
+//	}
 	
 	//User Methods
 

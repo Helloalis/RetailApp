@@ -28,6 +28,10 @@ public class BookSale {
     //how many copies of a book are being bought
     @Column
     private int quantity;
+	
+	public BookSale() {
+		this(null, null, 0);
+	}
 
 	public BookSale(Book book, Sale sale, int quantity) {
 		super();

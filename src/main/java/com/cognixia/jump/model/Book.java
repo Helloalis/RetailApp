@@ -1,5 +1,7 @@
 package com.cognixia.jump.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -51,7 +53,7 @@ public class Book {
 	
 	//I needed a many to many relationship with bookSales, but the join table need a quantity column, or else it would only keep track of what books were being sold, but not how many were being sold. Someone buys 23 copies of moby dick for English class, and the system won't track that. So instead, I set up the many to many tables manually, with two one to many relationships
 	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-	private Set<BookSale> BookSale;
+	private List<BookSale> bookSale;
 
 	//keeps track of what genre books fall into. Would enable users to find all books that fit in one genre, or to see books that match multiple genres. Extension, unimplemented
 //  @ManyToMany
@@ -61,16 +63,17 @@ public class Book {
 //	private Set<Genre> genre;
 	
 	public Book() {
-		this(null, "","", -1, -1);
+		this.bookSale = new ArrayList<BookSale>();
 	}
 
-	public Book(Integer id, String title, String author, double price, int qty) {
+	public Book(String title, String author, double price, int size, int qty) {
 		super();
-		this.bookId = id;
 		this.title = title;
 		this.author = author;
 		this.price = price;
+		this.size = size;
 		this.qty = qty;
+		this.bookSale = new ArrayList<BookSale>();
 	}
 
 	public Integer getId() {
@@ -112,7 +115,15 @@ public class Book {
 	public void setQty(int qty) {
 		this.qty = qty;
 	}
-
+	
+	public int getSize() {
+		return size;
+	}
+	
+	public void setSize(int size) {
+		this.size = size;
+	}
+	
 	@Override
 	public String toString() {
 		return "Books [id=" + bookId + ", title=" + title + ", author=" + author + ", price=" + price + ", qty=" + qty

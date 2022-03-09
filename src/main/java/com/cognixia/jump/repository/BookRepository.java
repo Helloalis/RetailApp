@@ -10,12 +10,14 @@ import org.springframework.stereotype.Repository;
 import com.cognixia.jump.model.Book;
 
 @Repository
-public interface BookRepository extends JpaRepository<Book, Long> {
+public interface BookRepository extends JpaRepository<Book, Integer> {
 
 	Optional<Book> findByTitle(String title);
 	List<Book> findByAuthor(String author);
 	List<Book> findBySizeGreaterThan(int size);
 	List<Book> findBySizeLessThan(int size);
 	Optional<Book> findByTitleContaining(String contain);
+	boolean existsByTitle(String title);
+	void deleteBookByTitle(String un);
 	
 }

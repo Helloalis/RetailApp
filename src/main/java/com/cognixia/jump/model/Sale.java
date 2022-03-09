@@ -1,6 +1,8 @@
 package com.cognixia.jump.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -42,20 +44,25 @@ public class Sale {
     @JoinColumn(name = "userID")
 	private User user;
 	
-	@Past 
-	@Temporal(TemporalType.DATE)
-	private Date date;
+//	@Past 
+//	@Temporal(TemporalType.DATE)
+//	private Date date;
 	
 	//I needed a many to many relationship with bookSales, but the join table need a quantity column, or else it would only keep track of what books were being sold, but not how many were being sold. Someone buys 23 copies of moby dick for English class, and the system won't track that. So instead, I set up the many to many tables manually, with two one to many relationships
 	@OneToMany(mappedBy = "sale", cascade = CascadeType.ALL)
-	private Set<BookSale> BookSale;
+	private List<BookSale> bookSale;
 	
-	public Sale(double totalPrice, User users, Set<com.cognixia.jump.model.BookSale> bookSale) {
+	public Sale() {
+		this.bookSale = new ArrayList<BookSale>();
+	}
+	
+	public Sale(User use) {
 		super();
 		this.saleId = null;
-		this.totalPrice = totalPrice;
-		this.user = users;
-		BookSale = bookSale;
+		this.totalPrice = 0;
+		this.user = use;
+		this.bookSale = new ArrayList<BookSale>();
+		
 	}
 
 	public Integer getSaleId() {
@@ -70,16 +77,24 @@ public class Sale {
 		return totalPrice;
 	}
 
-	public void setTotalPrice(double totalPrice) {
-		this.totalPrice = totalPrice;
+	public void setTotalPrice() {
+		double retVal = 0;
+		for(BookSale i : bookSale) {
+			retVal += i.getBook().getPrice() * i.getQuantity();
+		}
+		this.totalPrice = retVal;
 	}
 
-	public Set<BookSale> getBookSale() {
-		return BookSale;
+	public List<BookSale> getBookSale() {
+		return bookSale;
 	}
 
-	public void setBookSale(Set<BookSale> bookSale) {
-		BookSale = bookSale;
+	public void setBookSale(List<BookSale> bookSale) {
+		this.bookSale = bookSale;
+	}
+	
+	public void addBookSale(BookSale bs) {
+		bookSale.add(bs);
 	}
 
 	public User getUser() {
@@ -89,6 +104,7 @@ public class Sale {
 	public void setUser(User users) {
 		this.user = users;
 	}
+	
 	
 	
 }

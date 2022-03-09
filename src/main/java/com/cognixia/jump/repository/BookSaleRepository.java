@@ -14,7 +14,7 @@ import com.cognixia.jump.model.Sale;
 import com.cognixia.jump.model.User;
 
 @Repository
-public interface BookSaleRepository extends JpaRepository<BookSale, Long> {
+public interface BookSaleRepository extends JpaRepository<BookSale, Integer> {
 	
 	public List<BookSale> findByBook(Book book);
 	public List<BookSale> findBySale(Sale sale);
