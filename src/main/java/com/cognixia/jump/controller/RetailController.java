@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cognixia.jump.model.Book;
+import com.cognixia.jump.model.BookSale;
 import com.cognixia.jump.model.Sale;
 import com.cognixia.jump.model.User;
 import com.cognixia.jump.service.RetailService;
@@ -42,7 +43,7 @@ public class RetailController {
 		Book chars = found.get();
 		return ResponseEntity.status(200).body(chars); 
 	}
-	@GetMapping("/books/{author}")
+	@GetMapping("/books/author/{author}")
 	public List<Book> getBookByAuthor(@PathVariable String author) {
 		return serv.getBookByAuthor(author);
 	}
@@ -61,7 +62,7 @@ public class RetailController {
 	public List<Sale> getSales() {
 		return serv.getAllSales();
 	}
-	@GetMapping("/sales/{user}")
+	@GetMapping("/sales/user/{user}")
 	public List<Sale> getSalesByUser(@PathVariable String username) {
 		Optional<User> found = serv.getByUsername(username);
 		if(found.isEmpty()) {	
@@ -70,17 +71,108 @@ public class RetailController {
 		User user = found.get();
 		return serv.getSaleByUser(user);
 	}
-	//@GetMapping("/")
+	@GetMapping("/sales/{id}")
+	public ResponseEntity<?> getSaleById(@PathVariable int id) {
+		Optional<Sale> found = serv.getSaleById(id);
+		if(found.isEmpty()) {
+			return ResponseEntity.status(404).body("Sale not found");
+		}
+		Sale chars = found.get();
+		return ResponseEntity.status(200).body(chars); 
+	}
 	
 	//Delete methods
-	
+	//Not sure if you would actually need to delete any of these
+	//But I think thats just me being way to reluctant to delete stuff
+	@DeleteMapping("/book/{title}")
+	public ResponseEntity<?> deleteBook(@PathVariable String title) {
+		Optional<Book> temp = serv.getBookByTitle(title);
+		int id;
+		id = temp.get().getId();		
+		if(serv.deleteBookById(id)) {
+			return ResponseEntity.status(200).body("Book:" + title + " was deleted");
+		}
+		return ResponseEntity.status(404).body("Book not found");		
+	}
+	@DeleteMapping("/user/{username}")
+	public ResponseEntity<?> deleteUser(@PathVariable String username) {
+		Optional<User> temp = serv.getByUsername(username);
+		int id;
+		id = temp.get().getId();		
+		if(serv.deleteUserById(id)) {
+			return ResponseEntity.status(200).body("User:" + username + " was deleted");
+		}
+		return ResponseEntity.status(404).body("User not found");		
+	}
+	@DeleteMapping("/sale/{id}")
+	public ResponseEntity<?> deleteSale(@PathVariable int id) {	
+		if(serv.deleteSaleById(id)) {
+			return ResponseEntity.status(200).body("Sale ID:" + id + " was deleted");
+		}
+		return ResponseEntity.status(404).body("Sale not found");		
+	}
+	@DeleteMapping("/bookSale/{id}")
+	public ResponseEntity<?> deleteBookSale(@PathVariable int id) {	
+		if(serv.deleteBookSaleById(id)) {
+			return ResponseEntity.status(200).body("BookSale ID:" + id + " was deleted");
+		}
+		return ResponseEntity.status(404).body("BookSale not found");		
+	}
 	
 	//Post methods
-	
-	
+	@PostMapping("/book")
+	public ResponseEntity<?> createBook(@RequestBody Book bo) {
+		Book update = serv.createBook(bo);
+		return ResponseEntity.status(201).body("Book " + bo.getTitle() + " was created");
+	}
+	@PostMapping("/user")
+	public ResponseEntity<?> createUser(@RequestBody User bo) {
+		User update = serv.createUser(bo);
+		return ResponseEntity.status(201).body("User " + bo.getUsername() + " was created");
+	}
+	@PostMapping("/sale")
+	public ResponseEntity<?> createSale(@RequestBody Sale bo) {
+		Sale update = serv.createSale(bo);
+		return ResponseEntity.status(201).body("Sale " + bo.getSaleId() + " was created");
+	}
+	@PostMapping("/sale/{sale}")
+	public ResponseEntity<?> createBookSale(@PathVariable int id, @RequestBody BookSale bo) {
+		BookSale update = serv.createBookSale(bo);
+		return ResponseEntity.status(201).body("BookSale " + bo.getId() + " was created");
+	}
 	
 	//Put methods
+	@PutMapping("/book/{title}")
+	public ResponseEntity<?> updateBook(@RequestBody Book chars) {
+		Book update = serv.updateBookById(chars);
+		if(update == null) {
+			return ResponseEntity.status(404).body("Book " + chars.getTitle() + " was not found");
+		}
+		else {
+			return ResponseEntity.status(202).body("Book " + chars.getTitle() + " was updated");
+		}
+	}
+	@PutMapping("/user/{username}")
+	public ResponseEntity<?> updateUser(@RequestBody User chars) {
+		User update = serv.updateUserById(chars);
+		if(update == null) {
+			return ResponseEntity.status(404).body("User " + chars.getUsername() + " was not found");
+		}
+		else {
+			return ResponseEntity.status(202).body("User " + chars.getUsername() + " was updated");
+		}
+	}
+	@PutMapping("/booksale/{id}")
+	public ResponseEntity<?> updateBookSale(@RequestBody BookSale chars) {
+		BookSale update = serv.updateBookSaleById(chars);
+		if(update == null) {
+			return ResponseEntity.status(404).body("BookSale " + chars.getId() + " was not found");
+		}
+		else {
+			return ResponseEntity.status(202).body("BookSale " + chars.getId() + " was updated");
+		}
+	}
 	
-	
+	@PutMapping("/sale/{id}")
 	
 }

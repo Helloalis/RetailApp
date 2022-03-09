@@ -1,5 +1,6 @@
 package com.cognixia.jump.config;
 
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -34,7 +35,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		
 		http.csrf().disable()
 			.authorizeRequests()
-			.antMatchers("/api/books").hasAnyRole("USER", "ADMIN")
+			.antMatchers(HttpMethod.GET, "/api/books").hasAnyRole("USER", "ADMIN")
+			.antMatchers(HttpMethod.GET, "/api/books/**").hasAnyRole("USER", "ADMIN")
+			.antMatchers(HttpMethod.GET, "/api/books/author/**").hasAnyRole("USER", "ADMIN")
+			.antMatchers(HttpMethod.GET, "/api/books/longer/**").hasAnyRole("USER", "ADMIN")
+			.antMatchers(HttpMethod.GET, "/api/books/shorter/**").hasAnyRole("USER", "ADMIN")
+			.antMatchers(HttpMethod.GET, "/api/sales/**").hasAnyRole("USER", "ADMIN")
+			.antMatchers(HttpMethod.GET, "/api/books/user/**").hasAnyRole("USER", "ADMIN")
+			
 			.antMatchers("/**").hasRole("ADMIN")
 			.and().httpBasic();
 		

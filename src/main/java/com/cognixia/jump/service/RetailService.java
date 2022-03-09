@@ -44,15 +44,13 @@ public class RetailService {
 		Book created = bookRepo.save(ret);
 		return created;
 	}
-//	public User createUser(User chars) {
-//		Book ret = new User();
-//		ret.setAffil(chars.getAffil());
-//		ret.setName(chars.getName());
-//		ret.setStatus(chars.getStatus());
-//		Book created = repo.save(ret);
-//		
-//		return created;
-//	}
+	public User createUser(User chars) {
+		User ret = new User();
+		ret.setPassword(chars.getPassword());
+		ret.setUsername(chars.getUsername());
+		User created = userRepo.save(ret);
+		return created;
+	}
 
 	public BookSale createBookSale(BookSale bs) {
 		BookSale ret = new BookSale();
@@ -142,6 +140,20 @@ public class RetailService {
 		}
 		return null;
 	}
+	public User updateUserById(User user) {
+		if(userRepo.existsById(user.getId())) {
+			User update = userRepo.save(user);
+			return update;
+		}
+		return null;
+	}
+	public BookSale updateBookSaleById(BookSale bs) {
+		if(bookSaleRepo.existsById(bs.getId())) {
+			BookSale update = bookSaleRepo.save(bs);
+			return update;
+		}
+		return null;
+	}
 	
 	
 	
@@ -226,6 +238,6 @@ public class RetailService {
 		List<BookSale> retVal = bookSaleRepo.findBySale(sale);
 		return retVal;
 	}
-	
+
 
 }
