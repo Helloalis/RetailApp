@@ -1,6 +1,7 @@
 package com.cognixia.jump.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -17,6 +18,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.JoinColumn;
 
 @Entity
@@ -45,8 +50,12 @@ public class User {
 	private boolean enabled;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Sale> bookSale;
+	@JsonIgnore
+	private Set<Sale> bookSale;
 
+//	@Column
+//	private boolean passResetDate;
+// update password every six months
 
 //    @ManyToMany(cascade = {CascadeType.ALL})
 //    @JoinTable(name = "userSales",
@@ -66,7 +75,7 @@ public class User {
 		this.password = password;
 		this.role = role;
 		this.enabled = enabled;
-		this.bookSale = new ArrayList<Sale>();
+		this.bookSale = new HashSet<Sale>();
 	}
 	public User(String username, String password) {
 		super();
@@ -75,7 +84,7 @@ public class User {
 		this.password = password;
 		this.role = Role.ROLE_USER;
 		this.enabled = true;
-		this.bookSale = new ArrayList<Sale>();
+		this.bookSale = new HashSet<Sale>();
 	}
 
 	public String getUsername() {
@@ -84,6 +93,15 @@ public class User {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	public Set<Sale> getBookSales() {
+		return bookSale;
+	}
+	public void setBookSales(Set<Sale> bs) {
+		bookSale = bs;
+	}
+	public void addSale(Sale s) {
+		bookSale.add(s);
 	}
 
 	public String getPassword() {

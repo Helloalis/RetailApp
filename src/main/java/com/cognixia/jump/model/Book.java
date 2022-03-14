@@ -1,6 +1,7 @@
 package com.cognixia.jump.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -17,6 +18,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 //import javax.validation.constraints.Min;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="books")
@@ -54,8 +58,9 @@ public class Book {
 	
 	//I needed a many to many relationship with bookSales, but the join table need a quantity column, or else it would only keep track of what books were being sold, but not how many were being sold. Someone buys 23 copies of moby dick for English class, and the system won't track that. So instead, I set up the many to many tables manually, with two one to many relationships
 	//List of bookSales that contain each book
+	@JsonIgnore
 	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<Sale> bookSale;
+	private Set<Sale> bookSale;
 
 	//keeps track of what genre books fall into. Would enable users to find all books that fit in one genre, or to see books that match multiple genres. Extension, unimplemented
 //  @ManyToMany
@@ -65,7 +70,7 @@ public class Book {
 //	private Set<Genre> genre;
 	
 	public Book() {
-		this.bookSale = new ArrayList<Sale>();
+		this.bookSale = new HashSet<Sale>();
 	}
 
 	public Book(String title, String author, double price, int size, int qty) {
@@ -76,7 +81,7 @@ public class Book {
 		this.price = price;
 		this.size = size;
 		this.qty = qty;
-		this.bookSale = new ArrayList<Sale>();
+		this.bookSale = new HashSet<>();
 	}
 
 	public Integer getId() {
@@ -85,6 +90,16 @@ public class Book {
 
 	public void setId(Integer id) {
 		this.bookId = id;
+	}
+	public Set<Sale> getBookSales() {
+		return bookSale;
+	}
+	public void setBookSales(Set<Sale> bs) {
+		bookSale = bs;
+	}
+	
+	public void addSale(Sale s) {
+		bookSale.add(s);
 	}
 
 	public String getTitle() {

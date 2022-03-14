@@ -1,0 +1,78 @@
+Database structure to represent chain of book stores
+
+Barnes and Nobles
+
+Books
+	bookID INT UNSIGNED AUTO_INCREMENT,
+    title VARCHAR(100) NOT NULL,
+    authorName VARCHAR(100),
+    publisher VARCHAR(255),
+    pageCount INT UNSIGNED,
+    coverURL VARCHAR(255),
+	description TEXT(65535),
+	price Double
+	String content rating
+	format enum = {Paperback, Audiobook, Hardcover, Comic?}
+
+Genre 
+	genreId
+	genreTitle
+	
+BookGenre - Many to Many
+	bookId
+	genreId	
+
+	
+Customer
+	-last visit
+	-purchases
+
+Employee
+	id
+	first name last name
+	email
+	phone number
+	wages
+	schedule
+	hireDate
+	role enum = {Cashier, Manager, Librarian?, Janitors, Customer Representatives?
+	
+
+Store	
+	id
+	street address
+	county/district
+	state
+	hours(What days open, from when to when) - Seperate Classes
+	Set of employees(one to many)
+	Set of Sales
+	Inventory - set of books or map? Book as key, quantity as value?
+		or array of Inventory object?
+		
+Inventory Object
+	id 
+	Book object
+	int quantity
+	Date lastShipment?
+	Date nextShipment?
+	
+Sale Object - each purchase, can be multiple books in a purchase
+	int id
+	List of BookSales, or List of Books. If Customer buys two copies, list has two of the same book object
+	Total Price = Sum of (book.price * quantity)
+	Date and time
+	
+BookSale Object
+	int id
+	Book object
+	quantity
+	
+	
+	
+Schedule Object for employees
+	7 objects for each day.
+	start time, close time
+	break time
+
+
+	
